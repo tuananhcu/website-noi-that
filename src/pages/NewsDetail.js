@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+
 import request from "../api/request";
 import Loading from "../components/Loading";
 import slugifyText from "../utils/slugifyText";
@@ -7,11 +8,10 @@ import slugifyText from "../utils/slugifyText";
 function NewsDetail() {
   const { newsTitle } = useParams();
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    document.title = "Tất cả tin tức";
+    document.title = newsTitle.replace(/-/g, " ");
 
-    setLoading(true);
     const getNews = async () => {
       try {
         const res = await request.get("news");

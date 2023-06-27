@@ -6,6 +6,14 @@ export const addCart = (product) => {
   };
 };
 
+// Increase Product
+export const addOne = (product) => {
+  return {
+    type: "INCREASE",
+    payload: product,
+  };
+};
+
 // For deleting item from the Cart
 export const delCart = (product) => {
   return {
@@ -22,18 +30,25 @@ export const removeCart = (product) => {
   };
 };
 
-//add wishlist
-export const addWishlist = (product) => {
+//Pay cart
+export const payCart = () => {
   return {
-    type: "ADD_WISHLIST",
+    type: "PAY",
+  };
+};
+
+// product Selected
+export const toggleSelected = (product) => {
+  return {
+    type: "SELECT",
     payload: product,
   };
 };
 
-//remove wishlist
-export const removeWishlist = (product) => {
+//Toggle wishlist
+export const toggleWishlist = (product) => {
   return {
-    type: "REMOVE_WISHLIST",
+    type: "TOGGLE_WISHLIST",
     payload: product,
   };
 };

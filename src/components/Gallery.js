@@ -5,7 +5,6 @@ function Gallery(props) {
   const imgs = props.image || [];
   const [wordData, setWordData] = useState(imgs[0]);
   const handleClick = (index) => {
-    console.log(index);
     const wordSlider = imgs[index];
     setWordData(wordSlider);
   };

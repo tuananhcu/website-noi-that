@@ -1,62 +1,56 @@
 import React from "react";
 import { toast } from "react-toastify";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Contact = () => {
-  const initialValues = { username: "", email: "", phone: "", description: "" };
-  const [formValues, setFormValues] = useState(initialValues);
-  const [formError, setFormError] = useState({});
-  const [isSubmit, setIsSubmit] = useState(false);
+  useEffect(() => {
+    document.title = "Liên hệ với chúng tôi";
+  }, []);
+
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    phone: "",
+    description: "",
+  });
+  const [errors, setErrors] = useState({});
+
+  const history = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const validateForm = () => {
+    let formErrors = {};
+    let formIsValid = true;
+    // Kiểm tra định dạng email
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(formData.email)) {
+      formIsValid = false;
+      formErrors.email = "Email không hợp lệ";
+    }
+    // Kiểm tra định dạng số điện thoại
+    const phonePattern = /((09|03|07|08|05)+([0-9]{8})\b)/g;
+    if (!phonePattern.test(formData.phone)) {
+      formIsValid = false;
+      formErrors.phone = "Số điện thoại không hợp lệ";
+    }
+    setErrors(formErrors);
+    return formIsValid;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setFormError(validate(formValues));
-    setIsSubmit(true);
-  };
-
-  useEffect(() => {
-    document.title = "Liên hệ với chúng tôi";
-    if (Object.keys(formError).length === 0 && isSubmit) {
-      // console.log(formValues);
+    if (!validateForm()) {
+      toast.error("Thông tin không hợp lệ. Hãy nhập lại!");
+      return;
+    } else {
       toast.success("Gửi thành công");
+      history("/");
     }
-    if (Object.keys(formError).length !== 0 && isSubmit) {
-      toast.error("Thông tin không chính xác. Hãy nhập lại");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formError]);
-
-  const validate = (values) => {
-    const errors = {};
-    const regEmail =
-      /(^[a-zA-Z0-9_]+[.]*[a-zA-Z0-9_]+[@][a-zA-Z]+[.][a-zA-Z]{2,4}$)|(^[a-zA-Z0-9]+[.]*[a-zA-Z0-9_]+(@)[a-zA-Z]+[.][a-zA-Z]{2,4}[.][a-zA-Z]{2}$)/i;
-    const regPhone = /((09|03|07|08|05)+([0-9]{8})\b)/g;
-
-    if (!values.username) {
-      errors.username = "Họ tên không được để trống !";
-    }
-
-    if (!values.email) {
-      errors.email = "Email không được để trống !";
-    } else if (!regEmail.test(values.email)) {
-      errors.email = "Email không đúng định dạng !";
-    }
-
-    if (!values.phone) {
-      errors.phone = "Số điện thoại không được để trống !";
-    } else if (!regPhone.test(values.phone)) {
-      errors.phone = "Số điện thoại không đúng định dạng !";
-    }
-
-    if (!values.description) {
-      errors.description = "Nội dung không được để trống !";
-    }
-    return errors;
   };
 
   return (
@@ -90,48 +84,46 @@ const Contact = () => {
                     type="text"
                     id="username"
                     name="username"
-                    value={formValues.username}
+                    value={formData.username}
                     onChange={handleChange}
                     required
                   />
                   <label htmlFor="username">Họ tên</label>
-                  <small>{formError.username}</small>
                 </div>
                 <div className="form-contact">
                   <input
                     id="email"
                     type="text"
                     name="email"
-                    value={formValues.email}
+                    value={formData.email}
                     onChange={handleChange}
                     required
                   />
                   <label htmlFor="email">Email</label>
-                  <small>{formError.email}</small>
+                  <small>{errors.email}</small>
                 </div>
                 <div className="form-contact">
                   <input
                     id="phone"
                     type="text"
                     name="phone"
-                    value={formValues.phone}
+                    value={formData.phone}
                     onChange={handleChange}
                     required
                   />
                   <label htmlFor="phone">Số điện thoại</label>
-                  <small>{formError.phone}</small>
+                  <small>{errors.phone}</small>
                 </div>
                 <div className="form-contact">
                   <input
-                    id="desc"
+                    id="description"
                     type="text"
                     name="description"
-                    value={formValues.description}
+                    value={formData.description}
                     onChange={handleChange}
                     required
                   />
                   <label htmlFor="description">Nội dung</label>
-                  <small>{formError.description}</small>
                 </div>
                 <button type="submit" className="box-contact__btn">
                   Gửi

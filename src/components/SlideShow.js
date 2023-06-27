@@ -1,17 +1,18 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import request from "../api/request";
 import Slider from "react-slick";
+
+import request from "../api/request";
 import StarRate from "./StarRate";
 import slugifyText from "../utils/slugifyText";
+import formatCurrency from "../utils/formatCurrency";
 
 function SlideShow() {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
     const getProducts = async () => {
       try {
         const res = await request.get("product");
@@ -73,10 +74,10 @@ function SlideShow() {
       ) : (
         <Slider {...settings} className="slider">
           {data
-            .filter((x) => x.Rating === 5)
+            .filter((x) => x.rating === 5)
             .map((item) => (
               <Link
-                to={`/san-pham/${slugifyText(item.category)}/${slugifyText(
+                to={`/${slugifyText(item.category)}/${slugifyText(
                   item.product_name
                 )}`}
                 key={item.id}
@@ -86,21 +87,14 @@ function SlideShow() {
                   <div className="slider__content">
                     <div className="slider__content--title">
                       {item.product_name} <br />
-                      <StarRate value={item.Rating} />
+                      <StarRate value={item.rating} />
                     </div>
                     <span className="slider__content--old-price">
-                      {Intl.NumberFormat("it-IT", {
-                        style: "currency",
-                        currency: "VND",
-                      }).format(item.old_price)}
+                      {formatCurrency(item.old_price)}
                     </span>
                     <br />
                     <span className="slider__content--new-price">
-                      {" "}
-                      {Intl.NumberFormat("it-IT", {
-                        style: "currency",
-                        currency: "VND",
-                      }).format(item.price)}
+                      {formatCurrency(item.price)}
                     </span>
                   </div>
                 </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+
 import request from "../api/request";
 import slugifyText from "../utils/slugifyText";
 import Loading from "../components/Loading";
@@ -7,7 +8,7 @@ import ProductCard from "../components/ProductCard";
 
 function Products() {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const category = [
     "Phòng khách",
     "Phòng bếp",
@@ -22,7 +23,6 @@ function Products() {
   useEffect(() => {
     document.title = "Tất cả sản phẩm";
 
-    setLoading(true);
     const getProducts = async () => {
       try {
         const res = await request.get("product");
@@ -42,7 +42,7 @@ function Products() {
           <div className="all-product__item" key={index}>
             <div className="all-product__item--title">
               <h4>{item}</h4>
-              <Link to={`/san-pham/${slugifyText(item)}`} className="see-all">
+              <Link to={`/${slugifyText(item)}`} className="see-all">
                 Xem tất cả
               </Link>
             </div>

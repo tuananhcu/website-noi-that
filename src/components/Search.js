@@ -1,8 +1,9 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+
 import request from "../api/request";
 import { useDebounce } from "../hooks";
-import { Link } from "react-router-dom";
 import slugifyText from "../utils/slugifyText";
 
 function Search() {
@@ -62,8 +63,9 @@ function Search() {
         onClick={() => {
           setShowSearch(!showSearch);
         }}
+        title="Tìm kiếm"
       >
-        <i className="fi fi-bs-search"></i>
+        <i className="fi fi-br-search"></i>
       </div>
       <div className={showSearch ? "search-form active" : "search-form"}>
         <input
@@ -103,7 +105,7 @@ function Search() {
           {searchResult.slice(0, 4).map((value) => (
             <Link
               key={value.id}
-              to={`/san-pham/${slugifyText(value.category)}/${slugifyText(
+              to={`/${slugifyText(value.category)}/${slugifyText(
                 value.product_name
               )}`}
               onClick={() => {

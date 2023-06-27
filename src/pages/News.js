@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
 import request from "../api/request";
 import slugifyText from "../utils/slugifyText";
 import Loading from "../components/Loading";
 
 function News() {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     document.title = "Tin tức";
-
-    setLoading(true);
     const getNews = async () => {
       try {
         const res = await request.get("news");
@@ -81,6 +81,9 @@ function News() {
                       </div>
                     ))}
                   </div>
+                  <Link to={"/tat-ca-tin-tuc"}>
+                    Xem thêm <i className="fa-solid fa-angles-right"></i>
+                  </Link>
                 </div>
               </div>
             )}

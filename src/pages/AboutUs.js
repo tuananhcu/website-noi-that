@@ -1,9 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 function AboutUs() {
-  useEffect(() => {
-    document.title = "Giới thiệu";
-  }, []);
+  document.title = "Giới thiệu";
 
   const dataPolicy = [
     {

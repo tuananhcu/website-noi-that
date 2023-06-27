@@ -1,8 +1,7 @@
 import React from "react";
 import { Rating } from "react-simple-star-rating";
 
-function StarRate(props) {
-  const { value, size } = props;
+function StarRate({ value, size }) {
   return (
     <>
       <Rating

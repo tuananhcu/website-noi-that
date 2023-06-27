@@ -2,26 +2,32 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
+
 import Search from "./Search";
-import slugifyText from "../utils/slugifyText";
 
 function Header() {
   const state = useSelector((state) => state.handleCart);
   const state2 = useSelector((state) => state.handleWishlist);
   const [showScroll, setShowScroll] = useState(false);
   const [showNav, setShowNav] = useState(false);
-  const [fixed, setFixed] = useState(false);
+
+  const handleScroll = () => {
+    setShowNav(false);
+    if (window.scrollY > 60) {
+      setShowScroll(true);
+    } else {
+      setShowScroll(false);
+    }
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  };
 
   useEffect(() => {
-    window.onscroll = () => {
-      setShowNav(false);
-      if (window.scrollY > 60) {
-        setFixed(true);
-        setShowScroll(true);
-      } else {
-        setFixed(false);
-        setShowScroll(false);
-      }
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
@@ -36,7 +42,7 @@ function Header() {
 
   return (
     <>
-      <div className={fixed ? "header fixed" : "header"}>
+      <div className="header">
         <Link to="/">
           <img className="logo" src="../../images/AnhCat/logo.jpg" alt="logo" />
         </Link>
@@ -61,124 +67,28 @@ function Header() {
           </NavLink>
         </nav>
         <div className="group-icon">
-          <div className="icon icon-cart">
+          <div className="icon" title="Giỏ hàng">
             <Link to="/gio-hang">
-              <i className="fi fi-bs-shopping-bag"></i>
+              <i className="fi fi-br-shopping-bag"></i>
             </Link>
             {state.length === 0 ? "" : <div className="qty">{totalCart}</div>}
-            <div className="box box-cart">
-              {state.length === 0 ? (
-                <div className="box__empty">
-                  <p className="box__title">Giỏ hàng của bạn đang trống !</p>
-                  <Link to={"/san-pham"}>
-                    <div className="check__btn">Mua hàng ngay</div>
-                  </Link>
-                </div>
-              ) : (
-                <>
-                  <div className="box__title">Giỏ hàng của bạn</div>
-                  <div className="box__content">
-                    {state.map((item, index) => (
-                      <div key={index}>
-                        <Link
-                          to={`/san-pham/${slugifyText(
-                            item.category
-                          )}/${slugifyText(item.product_name)}`}
-                        >
-                          <div className="box__content--data">
-                            <div className="details">
-                              <img src={`../../${item.image}`} alt={""} />
-                              <div>
-                                <h5>{item.product_name}</h5>
-                                <h5>Chất liệu : {item.material}</h5>
-                              </div>
-                            </div>
-                            <h5>
-                              <span>
-                                {Intl.NumberFormat("it-IT", {
-                                  style: "currency",
-                                  currency: "VND",
-                                }).format(item.price)}
-                              </span>
-                            </h5>
-                          </div>
-                        </Link>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="check">
-                    <p>( {totalCart} sản phẩm )</p>
-                    <Link to={"/gio-hang"} className="check__btn">
-                      Xem chi tiết
-                    </Link>
-                  </div>
-                </>
-              )}
-            </div>
           </div>
-          <div className="icon icon-wishlist">
+          <div className="icon" title="Yêu thích">
             <Link to="/danh-sach-yeu-thich">
-              <i className="fi fi-bs-heart"></i>
+              <i className="fi fi-br-heart"></i>
             </Link>
             {state2.length === 0 ? (
               ""
             ) : (
               <div className="qty">{state2.length}</div>
             )}
-            <div className="box box-wishlist">
-              {state2.length === 0 ? (
-                <div className="box__empty">
-                  <p className="box__title">Danh sách yêu thích trống !</p>
-                  <Link to={"/san-pham"}>
-                    <div className="check__btn">Xem thêm sản phẩm</div>
-                  </Link>
-                </div>
-              ) : (
-                <>
-                  <div className="box__title">Danh sách yêu thích</div>
-                  <div className="box__content">
-                    {state2.map((item, index) => (
-                      <div key={index}>
-                        <Link
-                          to={`/san-pham/${slugifyText(
-                            item.category
-                          )}/${slugifyText(item.product_name)}`}
-                        >
-                          <div className="box__content--data">
-                            <div className="details">
-                              <img src={`../../${item.image}`} alt={""} />
-                              <div>
-                                <h5>{item.product_name}</h5>
-                                <h5>
-                                  {item.Rating}&nbsp;
-                                  <i className="fa-solid fa-star"></i>
-                                </h5>
-                              </div>
-                            </div>
-                            <h5>
-                              <span>
-                                {Intl.NumberFormat("it-IT", {
-                                  style: "currency",
-                                  currency: "VND",
-                                }).format(item.price)}
-                              </span>
-                            </h5>
-                          </div>
-                        </Link>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="check">
-                    <p>( {state2.length} sản phẩm )</p>
-                    <Link to={"/danh-sach-yeu-thich"} className="check__btn">
-                      Xem chi tiết
-                    </Link>
-                  </div>
-                </>
-              )}
-            </div>
           </div>
           {<Search />}
+          <div className="icon" title="Đăng nhập">
+            <Link to={"/dang-nhap"}>
+              <i className="fi fi-br-user"></i>
+            </Link>
+          </div>
           <div id="menu-bar" onClick={() => setShowNav(!showNav)}>
             <i
               className={showNav ? "fa-solid fa-xmark" : "fa-solid fa-bars"}
@@ -189,9 +99,7 @@ function Header() {
 
       <button
         id="scroll-top"
-        onClick={() => {
-          window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-        }}
+        onClick={scrollToTop}
         className={showScroll ? "active" : ""}
       >
         <i className="fa-solid fa-chevron-up"></i>

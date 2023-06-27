@@ -1,13 +1,14 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+
 import request from "../api/request";
 import Loading from "../components/Loading";
 import ProductCard from "../components/ProductCard";
 
 function SearchResult() {
   let [product, setProduct] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const sortOptions = [
     "Giá thấp đến cao",
@@ -22,7 +23,7 @@ function SearchResult() {
   let name = query.get("key");
 
   useEffect(() => {
-    setLoading(true);
+    document.title = "Kết quả tìm kiếm";
     const getProduct = async () => {
       try {
         const res = await request.get("product", {

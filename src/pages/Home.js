@@ -1,22 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import request from "../api/request";
 import Slider from "react-slick";
+
+import request from "../api/request";
 import SlideShow from "../components/SlideShow";
 import Loading from "../components/Loading";
 import slugifyText from "../utils/slugifyText";
 
 function Home() {
-  document.title = "Trang chủ | Nội thất Hoàng Hoan";
   useEffect(() => {
+    document.title = "Trang chủ | Nội thất Hoàng Hoan";
     const getNews = async () => {
-      const res = await request.get("news");
-      setDataNews(res.data.sort((a, b) => b.view - a.view));
+      try {
+        const res = await request.get("news");
+        setDataNews(res.data.sort((a, b) => b.view - a.view));
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
     };
     getNews();
   }, []);
 
   const [dataNews, setDataNews] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const category = [
     {
       category_name: "Phòng khách",
@@ -135,7 +143,7 @@ function Home() {
           <div className="row">
             {category.map((item, index) => (
               <div className="col-md-3" key={index}>
-                <Link to={`/san-pham/${slugifyText(item.category_name)}`}>
+                <Link to={`/${slugifyText(item.category_name)}`}>
                   <img src={item.image} alt="" />
                   <p>{item.category_name}</p>
                 </Link>
@@ -143,7 +151,7 @@ function Home() {
             ))}
           </div>
         </div>
-        {<SlideShow />}
+        <SlideShow />
       </section>
       <section id="home-aboutUs">
         <div className="home-aboutUs__content">
@@ -219,7 +227,7 @@ function Home() {
       <section id="home-news">
         <div className="home-news">
           <h4>tin tức</h4>
-          {dataNews.length === 0 ? (
+          {loading ? (
             <Loading />
           ) : (
             <div className="row ">

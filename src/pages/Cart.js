@@ -129,9 +129,9 @@ const Cart = () => {
           <span>{formatCurrency(totalAmount)}</span>
         </div>
         <div className="group-btn">
-          <button className="btn">
-            <Link to={"/san-pham"}>Chọn thêm sản phẩm khác</Link>
-          </button>
+          <Link to={"/san-pham"} className="btn">
+            Chọn thêm sản phẩm khác
+          </Link>
           <button className="btn" onClick={handleBuy}>
             Thanh toán ngay
           </button>

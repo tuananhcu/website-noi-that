@@ -22,7 +22,7 @@ function Category() {
   const itemsPerPage = 4; // Số mục hiển thị trên mỗi trang
   const [currentPage, setCurrentPage] = useState(1);
   // Tính toán số trang dựa trên tổng số mục và số mục trên mỗi trang
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const totalPages = Math.ceil((filter.length || data.length) / itemsPerPage);
   // Lấy dữ liệu hiển thị trên trang hiện tại
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -68,6 +68,7 @@ function Category() {
     switch (range) {
       case "Dưới 5 triệu": {
         const filteredList = sortedList.filter((item) => item.price < 5000000);
+        setCurrentPage(1);
         if (sortBy === "Giá thấp đến cao") {
           filteredList.sort((a, b) => a.price - b.price);
           setFilter(filteredList);
@@ -83,6 +84,7 @@ function Category() {
         const filteredList = sortedList.filter(
           (item) => item.price >= 5000000 && item.price <= 10000000
         );
+        setCurrentPage(1);
         if (sortBy === "Giá thấp đến cao") {
           filteredList.sort((a, b) => a.price - b.price);
         } else if (sortBy === "Giá cao đến thấp") {
@@ -93,6 +95,7 @@ function Category() {
       }
       case "Trên 10 triệu": {
         const filteredList = sortedList.filter((item) => item.price > 10000000);
+        setCurrentPage(1);
         if (sortBy === "Giá thấp đến cao") {
           filteredList.sort((a, b) => a.price - b.price);
         } else if (sortBy === "Giá cao đến thấp") {
